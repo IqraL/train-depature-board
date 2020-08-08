@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TrainStationDropDown from "./TrainStationDropDown";
 import Button from "@material-ui/core/Button";
 import { useLazyQuery, gql } from "@apollo/client";
-import GET_DEPATURES from "./getDepatureQuery";
+import GET_DEPATURE_BOARD from "./getDepatureQuery";
 
 const boardWrapper = {
   display: "grid",
@@ -34,8 +34,10 @@ function Board() {
 
   const [depatureStationNeeded, setdepatureStationNeeded] = useState(true);
   const [searched, setSearched] = useState(false);
-  console.log(GET_DEPATURES);
-  const [getTrainStationCrs, { loading, data }] = useLazyQuery(GET_DEPATURES);
+
+  const [getDepartureBoard, { loading, data }] = useLazyQuery(
+    GET_DEPATURE_BOARD
+  );
 
   useEffect(() => {
     if (depatureStation) setdepatureStationNeeded(false);
@@ -43,7 +45,14 @@ function Board() {
 
   useEffect(() => {
     if (searched && depatureStation) {
-      getTrainStationCrs({ variables: {} });
+      getDepartureBoard({
+        variables: {
+          depatureStation: "EUS",
+          alldepartures: false,
+          destinationLocation: "MAN",
+          numberOfResults: 2,
+        },
+      });
       setSearched(false);
     }
   }, [searched]);

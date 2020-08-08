@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TrainStationDropDown from "./TrainStationDropDown";
 import Button from "@material-ui/core/Button";
 const boardWrapper = {
@@ -28,6 +28,17 @@ function Board() {
   const [destinationStation, setDestinationStation] = useState(null);
   const [allDepatures, setAllDepatures] = useState(true);
 
+  const [depatureStationNeeded, setdepatureStationNeeded] = useState(true);
+  const [searched, setSearched] = useState(false);
+
+  useEffect(() => {
+    if (depatureStation) setdepatureStationNeeded(false);
+  }, [depatureStation]);
+
+  useEffect(() => {}, [searched]);
+
+  console.log(depatureStationNeeded, searched, depatureStation);
+
   return (
     <div style={boardWrapper}>
       <div style={headerStyle}>
@@ -50,10 +61,21 @@ function Board() {
           />
         </div>
         <div>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setSearched(true);
+            }}
+          >
             Go
           </Button>
         </div>
+      </div>
+      <div>
+        {depatureStationNeeded && searched && (
+          <div>Please select a Depature station</div>
+        )}
       </div>
     </div>
   );

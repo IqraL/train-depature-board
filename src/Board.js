@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import TrainStationDropDown from "./TrainStationDropDown";
 import Button from "@material-ui/core/Button";
+import { useLazyQuery, gql } from "@apollo/client";
+import GET_DEPATURES from "./getDepatureQuery";
+
 const boardWrapper = {
   display: "grid",
   justifyContent: "center",
@@ -23,6 +26,7 @@ const selectedWrapper = {
   gridTemplateColumns: "0fr 1fr",
   gridColumnGap: "15px",
 };
+
 function Board() {
   const [depatureStation, setDepatureStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
@@ -30,12 +34,23 @@ function Board() {
 
   const [depatureStationNeeded, setdepatureStationNeeded] = useState(true);
   const [searched, setSearched] = useState(false);
+  console.log(GET_DEPATURES);
+  const [getTrainStationCrs, { loading, data }] = useLazyQuery(GET_DEPATURES);
 
   useEffect(() => {
     if (depatureStation) setdepatureStationNeeded(false);
   }, [depatureStation]);
 
-  useEffect(() => {}, [searched]);
+  useEffect(() => {
+    if (searched && depatureStation) {
+      getTrainStationCrs({ variables: {} });
+      setSearched(false);
+    }
+  }, [searched]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   console.log(depatureStationNeeded, searched, depatureStation);
 

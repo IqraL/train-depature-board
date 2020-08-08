@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TrainStationDropDown from "./TrainStationDropDown";
 import Button from "@material-ui/core/Button";
-import { useLazyQuery, gql } from "@apollo/client";
+import { useApolloClient, gql } from "@apollo/client";
+
 import GET_DEPATURE_BOARD from "./getDepatureQuery";
 
 const boardWrapper = {
@@ -35,31 +36,56 @@ function Board() {
   const [depatureStationNeeded, setdepatureStationNeeded] = useState(true);
   const [searched, setSearched] = useState(false);
 
-  const [getDepartureBoard, { loading, data }] = useLazyQuery(
-    GET_DEPATURE_BOARD
-  );
+  const [error, setError] = useState(false);
+
+  const client = useApolloClient();
+
+  // const [getDepartureBoard, { loading, data, error }] = useLazyQuery(
+  //   GET_DEPATURE_BOARD
+  // );
 
   useEffect(() => {
     if (depatureStation) setdepatureStationNeeded(false);
   }, [depatureStation]);
 
-  useEffect(() => {
-    if (searched && depatureStation) {
-      getDepartureBoard({
+  // useEffect(async () => {
+  //   if (searched && depatureStation) {
+  //     getDepartureBoard({
+  //       variables: {
+  //         depatureStation: "EUS",
+  //         alldepartures: false,
+  //         destinationLocation: "MAN",
+  //         numberOfResults: 2,
+  //       },
+  //     });
+  //       setSearched(false);
+  //   }
+  // }, [searched]);
+
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
+
+  const getQuery = async () => {
+    if (!depatureStation) setdepatureStationNeeded(true);
+    if (depatureStation) {
+      const { data, loading, error } = await client.query({
+        query: GET_DEPATURE_BOARD,
+
         variables: {
-          depatureStation: "EUS",
+          depatureStation: depatureStation,
           alldepartures: false,
           destinationLocation: "MAN",
           numberOfResults: 2,
         },
       });
-      setSearched(false);
+      if (error) {
+        setError(true);
+        console.log(error);
+      }
+      console.log(data);
     }
-  }, [searched]);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  };
 
   console.log(depatureStationNeeded, searched, depatureStation);
 
@@ -89,7 +115,7 @@ function Board() {
             variant="contained"
             color="primary"
             onClick={() => {
-              setSearched(true);
+              getQuery();
             }}
           >
             Go
@@ -100,6 +126,7 @@ function Board() {
         {depatureStationNeeded && searched && (
           <div>Please select a Depature station</div>
         )}
+        {error && <div>...looks like there was an error</div>}
       </div>
     </div>
   );

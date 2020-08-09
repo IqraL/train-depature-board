@@ -2,10 +2,7 @@ import React from "react";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Board from "./Board";
 const client = new ApolloClient({
-  uri:
-    process.env.REACT_APP_ENV === "dev"
-      ? process.env.REACT_APP_DEV_URI
-      : process.env.REACT_APP_PRODUCTION_URI,
+  uri: "https://rest-train-api.herokuapp.com/graphql",
   cache: new InMemoryCache(),
 });
 

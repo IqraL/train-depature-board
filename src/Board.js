@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import TrainStationDropDown from "./TrainStationDropDown";
-import Button from "@material-ui/core/Button";
 import { useApolloClient, gql } from "@apollo/client";
 
-import IconButton from "@material-ui/core/IconButton";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import Button from "@material-ui/core/Button";
 import {
   boardWrapper,
   selectorHolder,
   headerStyle,
   selectedWrapper,
 } from "./css/BoardCss";
+
+import TrainStationDropDown from "./components/TrainStationDropDown";
+import ServicesWrapper from "./components/ServicesWrapper";
 
 import GET_DEPATURE_BOARD from "./getDepatureQuery";
 
@@ -101,86 +101,6 @@ function Board() {
         {error && <div>...looks like there was an error</div>}
         {data && searched && <ServicesWrapper data={data} />}
       </div>
-    </div>
-  );
-}
-
-const servicesWrapperCss = {
-  display: "grid",
-  justifyContent: "center",
-  gridRowGap: "15px",
-};
-function ServicesWrapper(props) {
-  return (
-    <div style={servicesWrapperCss}>
-      {props.data.getDepartureBoard.services.length === 0 ? (
-        <div>looks like there are no services running for your search </div>
-      ) : (
-        props.data.getDepartureBoard.services.map((service) => (
-          <Service serviceData={service} key={service.serviceID} />
-        ))
-      )}
-    </div>
-  );
-}
-
-const serviceWrapperCss = {};
-const serviceHeader = {};
-const serviceDetail = {
-  display: "grid",
-  gridTemplateColumns: "1fr 0fr",
-  alignItems: "center",
-};
-const serviceDetailHeader = {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
-  gridColumnGap: "5px",
-};
-const serviceExtraDetail = {};
-function Service(props) {
-  const { serviceData } = props;
-  const { dueTime, origin, destination, operator, etaORetd } = serviceData;
-  const [isExpanded, setIsExpanded] = useState(false);
-  console.log(serviceData);
-  return (
-    <div style={serviceWrapperCss}>
-      <div style={serviceHeader}>
-        {`${dueTime} ${origin.name} to ${destination.name} (operated by ${operator})`}
-      </div>
-      <div style={serviceDetail}>
-        <div style={serviceDetailHeader}>
-          <div>{origin.name}</div>
-          <div>
-            <b>Due:</b>
-            {dueTime}
-          </div>
-          <div>
-            <b>Exp:</b>
-            {etaORetd}
-          </div>
-          <div>
-            <b>Delayed:</b>
-            {serviceData.isDelayed ? `Yes` : `No`}
-          </div>
-          <div>
-            <b>Cancelled:</b>
-            {serviceData.isCancelled ? `Yes` : `No`}
-          </div>
-        </div>
-        <IconButton
-          color="primary"
-          component="span"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <AddCircleOutlineIcon />
-        </IconButton>
-      </div>
-      {isExpanded && (
-        <div style={serviceExtraDetail}>
-          <div>{serviceData.isDelayed && `${serviceData.delayReason}`}</div>
-          <div>{serviceData.isCancelled && `${serviceData.cancelReason}`}</div>
-        </div>
-      )}
     </div>
   );
 }

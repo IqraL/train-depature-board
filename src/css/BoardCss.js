@@ -7,7 +7,7 @@ export const boardWrapper = {
 };
 export const selectorHolder = {
   display: "grid",
-  gridTemplateColumns: "1fr 1fr 0fr",
+  gridTemplateColumns: "1fr 1fr 0fr 0fr",
   gridColumnGap: "50px",
 };
 export const headerStyle = {

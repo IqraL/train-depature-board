@@ -24,7 +24,7 @@ function Service(props) {
   const { serviceData, depatureStation } = props;
   const { dueTime, origin, destination, operator, etaORetd } = serviceData;
   const [isExpanded, setIsExpanded] = useState(false);
-  console.log(serviceData);
+
   return (
     <div style={serviceWrapperCss}>
       <div style={serviceHeader}>

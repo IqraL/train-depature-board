@@ -91,6 +91,19 @@ function Board() {
             Go
           </Button>
         </div>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setDepatureStation(null);
+              setDestinationStation(null);
+              setData(null);
+            }}
+          >
+            Reset
+          </Button>
+        </div>
       </div>
       <div>
         {depatureStationNeeded && searched && (

@@ -2,31 +2,14 @@ import React, { useState, useEffect } from "react";
 import TrainStationDropDown from "./TrainStationDropDown";
 import Button from "@material-ui/core/Button";
 import { useApolloClient, gql } from "@apollo/client";
+import {
+  boardWrapper,
+  selectorHolder,
+  headerStyle,
+  selectedWrapper,
+} from "./css/BoardCss";
 
 import GET_DEPATURE_BOARD from "./getDepatureQuery";
-
-const boardWrapper = {
-  display: "grid",
-  justifyContent: "center",
-  minWidth: "fit-content",
-  paddingTop: "100px",
-  gridRowGap: "50px",
-};
-const selectorHolder = {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr 0fr",
-  gridColumnGap: "50px",
-};
-const headerStyle = {
-  display: "grid",
-  justifyContent: "center",
-  textDecoration: "underline",
-};
-const selectedWrapper = {
-  display: "grid",
-  gridTemplateColumns: "0fr 1fr",
-  gridColumnGap: "15px",
-};
 
 function Board() {
   const [depatureStation, setDepatureStation] = useState(null);
@@ -36,54 +19,40 @@ function Board() {
   const [depatureStationNeeded, setdepatureStationNeeded] = useState(true);
   const [searched, setSearched] = useState(false);
 
+  const [data, setData] = useState(null);
   const [error, setError] = useState(false);
 
   const client = useApolloClient();
-
-  // const [getDepartureBoard, { loading, data, error }] = useLazyQuery(
-  //   GET_DEPATURE_BOARD
-  // );
 
   useEffect(() => {
     if (depatureStation) setdepatureStationNeeded(false);
   }, [depatureStation]);
 
-  // useEffect(async () => {
-  //   if (searched && depatureStation) {
-  //     getDepartureBoard({
-  //       variables: {
-  //         depatureStation: "EUS",
-  //         alldepartures: false,
-  //         destinationLocation: "MAN",
-  //         numberOfResults: 2,
-  //       },
-  //     });
-  //       setSearched(false);
-  //   }
-  // }, [searched]);
-
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const getQuery = async () => {
-    if (!depatureStation) setdepatureStationNeeded(true);
+    if (!depatureStation) {
+      setdepatureStationNeeded(true);
+      setSearched(true);
+    }
     if (depatureStation) {
       const { data, loading, error } = await client.query({
         query: GET_DEPATURE_BOARD,
-
         variables: {
           depatureStation: depatureStation,
-          alldepartures: false,
-          destinationLocation: "MAN",
-          numberOfResults: 2,
+          alldepartures: destinationStation ? false : true,
+          destinationLocation: destinationStation,
+          numberOfResults: 5,
         },
       });
       if (error) {
         setError(true);
         console.log(error);
       }
-      console.log(data);
+      setData(data);
+      setSearched(true);
     }
   };
 
@@ -127,9 +96,12 @@ function Board() {
           <div>Please select a Depature station</div>
         )}
         {error && <div>...looks like there was an error</div>}
+        {data && searched && <Services data={data} />}
       </div>
     </div>
   );
 }
+
+function Services() {}
 
 export default Board;

@@ -46,9 +46,6 @@ function TrainStationDropDown(props) {
         console.log(b, c);
         props.onChange(selectedOption.value);
       }}
-      getValue={(a, b, c) => {
-        console.log(a, b, c);
-      }}
       width="250px"
       styles={customStyles}
     />

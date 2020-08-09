@@ -1,0 +1,36 @@
+table.steelBlueCols {
+  width: 400px;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.steelBlueCols td,
+table.steelBlueCols th {
+  border: 1px solid #555555;
+  padding: 5px 10px;
+}
+table.steelBlueCols tbody td {
+  font-size: 12px;
+  color: #121212;
+}
+table.steelBlueCols thead {
+  background: #5972ff;
+}
+table.steelBlueCols thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: left;
+}
+table.steelBlueCols tfoot td {
+  font-size: 13px;
+}
+table.steelBlueCols tfoot .links {
+  text-align: right;
+}
+table.steelBlueCols tfoot .links a {
+  display: inline-block;
+  background: #ffffff;
+  color: #398aa4;
+  padding: 2px 8px;
+  border-radius: 5px;
+}

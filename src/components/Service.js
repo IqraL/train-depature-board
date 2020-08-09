@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import "../css/detailsTableCss.css";
 
 const serviceWrapperCss = {};
 const serviceHeader = {};
@@ -14,6 +15,10 @@ const serviceDetailHeader = {
   gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
   gridColumnGap: "5px",
 };
+
+const tableWrapper = { display: "grid", justifyContent: "center" };
+const reasonDiv = { display: "grid", justifyContent: "center", color: "red" };
+
 const serviceExtraDetail = {};
 function Service(props) {
   const { serviceData, depatureStation } = props;
@@ -55,8 +60,46 @@ function Service(props) {
       </div>
       {isExpanded && (
         <div style={serviceExtraDetail}>
-          <div>{serviceData.isDelayed && `${serviceData.delayReason}`}</div>
-          <div>{serviceData.isCancelled && `${serviceData.cancelReason}`}</div>
+          <div style={reasonDiv}>
+            <b>{serviceData.isDelayed && `${serviceData.delayReason}`}</b>
+          </div>
+          <div style={reasonDiv}>
+            <b>{serviceData.isCancelled && `${serviceData.cancelReason}`}</b>
+          </div>
+          <div style={tableWrapper}>
+            <table class="steelBlueCols">
+              <thead>
+                <tr>
+                  <th>Station</th>
+                  <th>Due</th>
+                  <th>Expected</th>
+                  <th>Platform</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{depatureStation.name}</td>
+                  <td>{dueTime}</td>
+                  <td>{etaORetd}</td>
+                  <td>{serviceData.platform}</td>
+                </tr>
+
+                {serviceData.callingPoints &&
+                  serviceData.callingPoints.length > 0 &&
+                  serviceData.callingPoints.map((cp) => {
+                    if (cp)
+                      return (
+                        <tr>
+                          <td>{cp.trainStation.name}</td>
+                          <td>{cp.duetime}</td>
+                          <td>{cp.etORat}</td>
+                          <td></td>
+                        </tr>
+                      );
+                  })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

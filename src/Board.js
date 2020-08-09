@@ -31,10 +31,6 @@ function Board() {
     if (depatureStation) setdepatureStationNeeded(false);
   }, [depatureStation]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const getQuery = async () => {
     if (!depatureStation) {
       setdepatureStationNeeded(true);
@@ -44,10 +40,12 @@ function Board() {
       const { data, loading, error } = await client.query({
         query: GET_DEPATURE_BOARD,
         variables: {
-          depatureStation: depatureStation,
+          depatureStation: depatureStation.value,
           alldepartures: destinationStation ? false : true,
-          destinationLocation: destinationStation,
-          numberOfResults: 5,
+          destinationLocation: destinationStation
+            ? destinationStation.value
+            : null,
+          numberOfResults: 10,
         },
       });
       if (error) {
@@ -58,8 +56,6 @@ function Board() {
       setSearched(true);
     }
   };
-
-  console.log(depatureStationNeeded, searched, depatureStation);
 
   return (
     <div style={boardWrapper}>
@@ -72,6 +68,7 @@ function Board() {
           <TrainStationDropDown
             name="Depature Station"
             onChange={(value) => setDepatureStation(value)}
+            value={depatureStation}
           />
         </div>
         <div style={selectedWrapper}>
@@ -80,6 +77,7 @@ function Board() {
             name="Destination Station"
             isDisabled={allDepatures}
             onChange={(value) => setDestinationStation(value)}
+            value={destinationStation}
           />
         </div>
         <div>

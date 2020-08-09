@@ -35,18 +35,16 @@ function TrainStationDropDown(props) {
 
   if (loading) return <div>...loading</div>;
   if (error) return <div>Opps looks like there was an error</div>;
-
+  console.log(props.value);
   return (
     <Select
-      defaultValue={{ key: "default", value: "default" }}
       isSearchable
       name="color"
       options={options}
-      onChange={(selectedOption, b, c) => {
-        console.log(b, c);
-        props.onChange(selectedOption.value);
+      onChange={(selectedOption) => {
+        props.onChange(selectedOption);
       }}
-      width="250px"
+      value={props.value}
       styles={customStyles}
     />
   );

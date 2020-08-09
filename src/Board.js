@@ -105,7 +105,11 @@ function Board() {
   );
 }
 
-const servicesWrapperCss = { display: "grid", justifyContent: "center" };
+const servicesWrapperCss = {
+  display: "grid",
+  justifyContent: "center",
+  gridRowGap: "15px",
+};
 function ServicesWrapper(props) {
   return (
     <div style={servicesWrapperCss}>
@@ -127,10 +131,16 @@ const serviceDetail = {
   gridTemplateColumns: "1fr 0fr",
   alignItems: "center",
 };
+const serviceDetailHeader = {
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+  gridColumnGap: "5px",
+};
 const serviceExtraDetail = {};
 function Service(props) {
   const { serviceData } = props;
   const { dueTime, origin, destination, operator, etaORetd } = serviceData;
+  const [isExpanded, setIsExpanded] = useState(false);
   console.log(serviceData);
   return (
     <div style={serviceWrapperCss}>
@@ -138,12 +148,39 @@ function Service(props) {
         {`${dueTime} ${origin.name} to ${destination.name} (operated by ${operator})`}
       </div>
       <div style={serviceDetail}>
-        <div>{`${origin.name} Due:${dueTime}  Exp:${etaORetd}`}</div>
-        <IconButton color="primary" component="span">
+        <div style={serviceDetailHeader}>
+          <div>{origin.name}</div>
+          <div>
+            <b>Due:</b>
+            {dueTime}
+          </div>
+          <div>
+            <b>Exp:</b>
+            {etaORetd}
+          </div>
+          <div>
+            <b>Delayed:</b>
+            {serviceData.isDelayed ? `Yes` : `No`}
+          </div>
+          <div>
+            <b>Cancelled:</b>
+            {serviceData.isCancelled ? `Yes` : `No`}
+          </div>
+        </div>
+        <IconButton
+          color="primary"
+          component="span"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
           <AddCircleOutlineIcon />
         </IconButton>
       </div>
-      <div style={serviceExtraDetail}></div>
+      {isExpanded && (
+        <div style={serviceExtraDetail}>
+          <div>{serviceData.isDelayed && `${serviceData.delayReason}`}</div>
+          <div>{serviceData.isCancelled && `${serviceData.cancelReason}`}</div>
+        </div>
+      )}
     </div>
   );
 }

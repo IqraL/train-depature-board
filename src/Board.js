@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import TrainStationDropDown from "./TrainStationDropDown";
 import Button from "@material-ui/core/Button";
 import { useApolloClient, gql } from "@apollo/client";
+
+import IconButton from "@material-ui/core/IconButton";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import {
   boardWrapper,
   selectorHolder,
@@ -102,7 +105,7 @@ function Board() {
   );
 }
 
-const servicesWrapperCss = {};
+const servicesWrapperCss = { display: "grid", justifyContent: "center" };
 function ServicesWrapper(props) {
   return (
     <div style={servicesWrapperCss}>
@@ -110,7 +113,7 @@ function ServicesWrapper(props) {
         <div>looks like there are no services running for your search </div>
       ) : (
         props.data.getDepartureBoard.services.map((service) => (
-          <Service serviceData={service} />
+          <Service serviceData={service} key={service.serviceID} />
         ))
       )}
     </div>
@@ -119,14 +122,27 @@ function ServicesWrapper(props) {
 
 const serviceWrapperCss = {};
 const serviceHeader = {};
-const serviceDetail = {};
+const serviceDetail = {
+  display: "grid",
+  gridTemplateColumns: "1fr 0fr",
+  alignItems: "center",
+};
 const serviceExtraDetail = {};
 function Service(props) {
   const { serviceData } = props;
+  const { dueTime, origin, destination, operator, etaORetd } = serviceData;
+  console.log(serviceData);
   return (
     <div style={serviceWrapperCss}>
-      <div style={serviceHeader}></div>
-      <div style={serviceDetail}></div>
+      <div style={serviceHeader}>
+        {`${dueTime} ${origin.name} to ${destination.name} (operated by ${operator})`}
+      </div>
+      <div style={serviceDetail}>
+        <div>{`${origin.name} Due:${dueTime}  Exp:${etaORetd}`}</div>
+        <IconButton color="primary" component="span">
+          <AddCircleOutlineIcon />
+        </IconButton>
+      </div>
       <div style={serviceExtraDetail}></div>
     </div>
   );

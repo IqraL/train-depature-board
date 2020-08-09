@@ -96,12 +96,40 @@ function Board() {
           <div>Please select a Depature station</div>
         )}
         {error && <div>...looks like there was an error</div>}
-        {data && searched && <Services data={data} />}
+        {data && searched && <ServicesWrapper data={data} />}
       </div>
     </div>
   );
 }
 
-function Services() {}
+const servicesWrapperCss = {};
+function ServicesWrapper(props) {
+  return (
+    <div style={servicesWrapperCss}>
+      {props.data.getDepartureBoard.services.length === 0 ? (
+        <div>looks like there are no services running for your search </div>
+      ) : (
+        props.data.getDepartureBoard.services.map((service) => (
+          <Service serviceData={service} />
+        ))
+      )}
+    </div>
+  );
+}
+
+const serviceWrapperCss = {};
+const serviceHeader = {};
+const serviceDetail = {};
+const serviceExtraDetail = {};
+function Service(props) {
+  const { serviceData } = props;
+  return (
+    <div style={serviceWrapperCss}>
+      <div style={serviceHeader}></div>
+      <div style={serviceDetail}></div>
+      <div style={serviceExtraDetail}></div>
+    </div>
+  );
+}
 
 export default Board;

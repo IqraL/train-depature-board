@@ -2,7 +2,7 @@ import React from "react";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Board from "./Board";
 const client = new ApolloClient({
-  uri: "https://rest-train-api.herokuapp.com/graphql",
+  uri: "https://api.uk-train-times.com/graphql",
   cache: new InMemoryCache(),
 });
 

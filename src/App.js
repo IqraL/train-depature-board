@@ -6,12 +6,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-console.log(
-  process.env.REACT_APP_PRODUCTION_URI,
-  process.env.REACT_APP_DEV_URI,
-  process.env.REACT_APP_ENV
-);
-
 function App() {
   return (
     <ApolloProvider client={client}>
